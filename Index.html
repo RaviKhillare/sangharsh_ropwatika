@@ -2,107 +2,190 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Product Webpage</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap for styling -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .slideshow-container { position: relative; max-width: 100%; margin: auto; overflow: hidden; }
-        .slide { display: none; width: 100%; }
-        .slide img { width: 100%; height: 350px; object-fit: cover; }
-        .products-section { padding: 40px 0; background: #f9f9f9; }
-        .product-icon { width: 100px; height: 100px; object-fit: contain; margin-bottom: 10px; }
-        .bottom-section { background: #222; color: #fff; padding: 20px 0; }
-        .important-links a { color: #fff; margin-right: 15px; text-decoration: underline; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>अंकुर रोपवाटिका - प्रीमियम रोपवाटिका</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Title Bar -->
-    <nav class="navbar navbar-dark bg-primary">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">My Product Webpage</span>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">अंकुर रोपवाटिका <i class="fas fa-leaf"></i></a>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">मुख्य पृष्ठ</a></li>
+                <li><a href="#about" class="nav-link">आमच्याबद्दल</a></li>
+                <li><a href="#products" class="nav-link">रोपे खरेदी करा</a></li>
+                <li><a href="#services" class="nav-link">सेवा</a></li>
+                <li><a href="#contact" class="nav-link">संपर्क</a></li>
+                <li><a href="login.php" class="nav-link">अॅडमिन लॉगिन</a></li>
+            </ul>
         </div>
     </nav>
 
-    <!-- Slideshow Section -->
-    <div class="slideshow-container mt-3">
-        <div class="slide fade">
-            <img src="https://via.placeholder.com/800x350?text=Slide+1" alt="Slide 1">
+    <!-- Notification Section -->
+    <div class="notification-bar">
+        <div class="container">
+            <marquee behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">
+                <p style="display:inline-block;"><i class="fas fa-bullhorn"></i> महत्वाची सूचना: पावसाळ्यानिमित्त सर्व रोपांवर २०% सूट!</p>
+            </marquee>
         </div>
-        <div class="slide fade">
-            <img src="https://via.placeholder.com/800x350?text=Slide+2" alt="Slide 2">
-        </div>
-        <div class="slide fade">
-            <img src="https://via.placeholder.com/800x350?text=Slide+3" alt="Slide 3">
-        </div>
-        <!-- Slideshow controls -->
-        <a class="prev" onclick="plusSlides(-1)" style="position:absolute;top:50%;left:10px;font-size:2em;color:white;cursor:pointer;">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)" style="position:absolute;top:50%;right:10px;font-size:2em;color:white;cursor:pointer;">&#10095;</a>
     </div>
 
-    <!-- Products Section -->
-    <section class="products-section text-center">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>निसर्गाला आपल्या घरी आणा</h1>
+            <p>इनडोअर आणि आउटडोअर रोपे, बियाणे आणि बागकामाच्या साधनांची विस्तृत श्रेणी शोधा.</p>
+            <a href="#products" class="btn btn-primary">आत्ताच खरेदी करा</a>
+        </div>
+    </section>
+
+    <!-- Features / About Snippet -->
+    <section id="about" class="features section-padding">
         <div class="container">
-            <h2>Our Products</h2>
-            <div class="row" id="products-row">
-                <div class="col-6 col-sm-4 col-md-3 mb-4">
-                    <img src="https://via.placeholder.com/100?text=Prod1" class="product-icon" alt="Product 1">
-                    <div>Product 1</div>
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <i class="fas fa-seedling"></i>
+                    <h3>सेंद्रिय वाढ</h3>
+                    <p>आमची सर्व रोपे १००% सेंद्रिय खतांचा वापर करून वाढवली जातात.</p>
                 </div>
-                <div class="col-6 col-sm-4 col-md-3 mb-4">
-                    <img src="https://via.placeholder.com/100?text=Prod2" class="product-icon" alt="Product 2">
-                    <div>Product 2</div>
+                <div class="feature-box">
+                    <i class="fas fa-truck"></i>
+                    <h3>जलद वितरण</h3>
+                    <p>तुमच्या दारात सुरक्षित आणि जलद वितरण.</p>
                 </div>
-                <div class="col-6 col-sm-4 col-md-3 mb-4">
-                    <img src="https://via.placeholder.com/100?text=Prod3" class="product-icon" alt="Product 3">
-                    <div>Product 3</div>
-                </div>
-                <div class="col-6 col-sm-4 col-md-3 mb-4">
-                    <img src="https://via.placeholder.com/100?text=Prod4" class="product-icon" alt="Product 4">
-                    <div>Product 4</div>
+                <div class="feature-box">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <h3>तज्ञांचे मार्गदर्शन</h3>
+                    <p>आमच्या तज्ञ वनस्पतिशास्त्रज्ञांकडून बागकामाच्या टिप्स मिळवा.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Bottom Section -->
-    <footer class="bottom-section text-center">
+    <!-- Products Section -->
+    <section id="products" class="products section-padding">
         <div class="container">
-            <div class="important-links">
-                <a href="#">Home</a>
-                <a href="#">About Us</a>
-                <a href="#">Contact</a>
-                <a href="#">Privacy Policy</a>
+            <h2 class="section-title">वैशिष्ट्यपूर्ण रोपे</h2>
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="card card-1">
+                    <div class="illustration-box">
+                        <img src="https://images.unsplash.com/photo-1512428813838-6591185a31b1?auto=format&fit=crop&w=500&q=60" alt="Snake Plant">
+                    </div>
+                    <div class="content">
+                        <h2>स्नेक प्लांट</h2>
+                        <p>हवा शुद्ध करणारे उत्कृष्ट इनडोअर रोप.</p>
+                        <p class="price">किंमत: ₹450</p>
+                        <button class="btn-blue">कार्टमध्ये टाका</button>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="card card-2">
+                    <div class="illustration-box">
+                        <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=500&q=60" alt="Aloe Vera">
+                    </div>
+                    <div class="content">
+                        <h2>कोरफड</h2>
+                        <p>त्वचेसाठी आणि आरोग्यासाठी गुणकारी औषधी वनस्पती.</p>
+                        <p class="price">किंमत: ₹250</p>
+                        <button class="btn-purple">कार्टमध्ये टाका</button>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="card card-3">
+                    <div class="illustration-box">
+                        <img src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=500&q=60" alt="Cactus">
+                    </div>
+                    <div class="content">
+                        <h2>गोल्डन कॅक्टस</h2>
+                        <p>कमी देखभाल लागणारे सुंदर सजावटीचे रोप.</p>
+                        <p class="price">किंमत: ₹300</p>
+                        <button class="btn-dark">कार्टमध्ये टाका</button>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="card card-1">
+                    <div class="illustration-box">
+                        <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=500&q=60" alt="Monstera">
+                    </div>
+                    <div class="content">
+                        <h2>मॉन्स्टेरा</h2>
+                        <p>मोठ्या पानांचे आकर्षक इनडोअर प्लांट.</p>
+                        <p class="price">किंमत: ₹850</p>
+                        <button class="btn-blue">कार्टमध्ये टाका</button>
+                    </div>
+                </div>
             </div>
-            <div class="mt-2">
-                &copy; 2025 My Product Webpage. All rights reserved.
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">आमच्या सेवा</h2>
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>लँडस्केप डिझाइन</h3>
+                    <p>आम्ही तुमच्या घरासाठी आणि ऑफिससाठी सुंदर लँडस्केप डिझाइन करतो.</p>
+                </div>
+                <div class="feature-box">
+                    <i class="fas fa-tools"></i>
+                    <h3>बागेची देखभाल</h3>
+                    <p>तुमची बाग निरोगी ठेवण्यासाठी नियमित देखभाल सेवा.</p>
+                </div>
+                <div class="feature-box">
+                    <i class="fas fa-gift"></i>
+                    <h3>रोपे भेट देणे</h3>
+                    <p>कॉर्पोरेट आणि वैयक्तिक कार्यक्रमांसाठी ग्रीन गिफ्टिंग सोल्यूशन्स.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section-padding">
+        <div class="container">
+            <h2 class="section-title">आमच्या रोपवाटिकेला भेट द्या</h2>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> १२३ ग्रीन स्ट्रीट, गार्डन सिटी, भारत</p>
+                    <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+                    <p><i class="fas fa-envelope"></i> info@ankurropvatika.com</p>
+                </div>
+                <form class="contact-form" action="submit_contact.php" method="POST">
+                    <input type="text" name="name" placeholder="तुमचे नाव" aria-label="Your Name" required>
+                    <input type="email" name="email" placeholder="तुमचा ईमेल" aria-label="Your Email" required>
+                    <textarea name="message" placeholder="संदेश" rows="5" aria-label="Message" required></textarea>
+                    <button type="submit" class="btn btn-primary">संदेश पाठवा</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 अंकुर रोपवाटिका. सर्व हक्क राखीव.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
             </div>
         </div>
     </footer>
 
-    <!-- Slideshow Script -->
-    <script>
-        let slideIndex = 1;
-        showSlides(slideIndex);
-
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
-        }
-
-        function showSlides(n) {
-            let i;
-            let slides = document.getElementsByClassName("slide");
-            if (n > slides.length) {slideIndex = 1}
-            if (n < 1) {slideIndex = slides.length}
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
-            slides[slideIndex-1].style.display = "block";
-        }
-
-        setInterval(function() {
-            plusSlides(1);
-        }, 4000); // Change slide every 4 seconds
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
