@@ -3,13 +3,14 @@ const IS_GITHUB = window.location.hostname.includes('github.io');
 const API_BASE = IS_GITHUB ? null : 'api/';
 
 /* --- Mock Data (Fallback for GitHub Pages) --- */
+/* --- Mock Data (Fallback for GitHub Pages) --- */
 const MOCK_PRODUCTS = [
-    { id: 1, name: "Snake Plant (स्नेक प्लांट)", price: 450, category: "indoor", image_url: "https://images.unsplash.com/photo-1512428813838-6591185a31b1?auto=format&fit=crop&w=500&q=60", description: "Best air purifying indoor plant." },
-    { id: 2, name: "Aloe Vera (कोरफड)", price: 250, category: "succulents", image_url: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=500&q=60", description: "Medicinal plant for skin and health." },
-    { id: 3, name: "Peace Lily (पीस लिली)", price: 550, category: "indoor", image_url: "https://images.unsplash.com/photo-1593691509543-c55ce15e0131?auto=format&fit=crop&w=500&q=60", description: "Beautiful white flowers." },
-    { id: 4, name: "Monstera (मॉन्स्टेरा)", price: 850, category: "indoor", image_url: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=500&q=60", description: "Stylish large leaves." },
-    { id: 5, name: "Golden Cactus", price: 300, category: "succulents", image_url: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=500&q=60", description: "Low maintenance." },
-    { id: 6, name: "Rose Plant", price: 150, category: "outdoor", image_url: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?auto=format&fit=crop&w=500&q=60", description: "Classic red roses." }
+    { id: 1, name: "Snake Plant (स्नेक प्लांट)", price: 450, category: "indoor", image_url: "https://placehold.co/400x300/e8f5e9/2e7d32?text=Snake+Plant", description: "Best air purifying indoor plant." },
+    { id: 2, name: "Aloe Vera (कोरफड)", price: 250, category: "succulents", image_url: "https://placehold.co/400x300/e8f5e9/2e7d32?text=Aloe+Vera", description: "Medicinal plant for skin and health." },
+    { id: 3, name: "Peace Lily (पीस लिली)", price: 550, category: "indoor", image_url: "https://placehold.co/400x300/e8f5e9/2e7d32?text=Peace+Lily", description: "Beautiful white flowers." },
+    { id: 4, name: "Monstera (मॉन्स्टेरा)", price: 850, category: "indoor", image_url: "https://placehold.co/400x300/e8f5e9/2e7d32?text=Monstera", description: "Stylish large leaves." },
+    { id: 5, name: "Golden Cactus", price: 300, category: "succulents", image_url: "https://placehold.co/400x300/fff3e0/ef6c00?text=Golden+Cactus", description: "Low maintenance." },
+    { id: 6, name: "Rose Plant", price: 150, category: "outdoor", image_url: "https://placehold.co/400x300/ffebee/c62828?text=Rose+Plant", description: "Classic red roses." }
 ];
 
 /* --- Data Source --- */
@@ -197,7 +198,7 @@ function renderProducts(productList) {
 
         card.innerHTML = `
             <div class="illustration-box">
-                <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="this.src='https://placehold.co/300?text=No+Image'">
             </div>
             <div class="card-content">
                 <h3 class="card-title">${product.name}</h3>
