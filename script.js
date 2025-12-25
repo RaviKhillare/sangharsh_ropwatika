@@ -88,6 +88,13 @@ async function fetchNotifications() {
 async function submitContact(e) {
     e.preventDefault();
 
+    // Hybrid Logic: Static Mode check
+    if (typeof IS_GITHUB !== 'undefined' && IS_GITHUB) {
+        showToast("Static Demo: Message not sent.");
+        document.getElementById('contact-form').reset();
+        return;
+    }
+
     const name = document.getElementById('contact-name').value;
     const email = document.getElementById('contact-email').value;
     const message = document.getElementById('contact-message').value;
@@ -112,6 +119,12 @@ async function submitContact(e) {
 
 async function checkout() {
     if (cart.length === 0) return showToast("Cart is empty!");
+
+    // Hybrid Logic: Static Mode check
+    if (typeof IS_GITHUB !== 'undefined' && IS_GITHUB) {
+        alert("This is a Static Demo on GitHub Pages.\nDatabase features (Orders) are disabled.\n\nTo test Orders, run this locally on XAMPP.");
+        return;
+    }
 
     const name = prompt("Enter your Name:");
     const phone = prompt("Enter your Phone:");
