@@ -1,59 +1,63 @@
 <?php
-session_start();
-include 'db.php';
+include 'api/db_connect.php';
 
-if (!isset($_SESSION['admin_logged_in'])) {
-    header("Location: login.php");
-    exit;
+// Handle Add
+if (isset($_POST['add_notification'])) {
+    $msg = $_POST['message'];
+    $conn->query("INSERT INTO notifications (message) VALUES ('$msg')");
+    $success = "Notification Added!";
 }
 
-// Handle Update
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $message = $_POST['message'];
-    // We insert a new one so we have history, or we could update the latest. 
-    // Here we insert new to keep it simple with the existing fetch logic (ORDER BY id DESC LIMIT 1).
-    $stmt = $conn->prepare("INSERT INTO notifications (message) VALUES (?)");
-    $stmt->bind_param("s", $message);
-    $stmt->execute();
-    $success = "Notification updated successfully!";
-}
-
-// Fetch current
-$result = $conn->query("SELECT * FROM notifications ORDER BY id DESC LIMIT 1");
-$current_msg = "";
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $current_msg = $row['message'];
+// Handle Delete
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $conn->query("DELETE FROM notifications WHERE id=$id");
+    header("Location: admin_notification.php");
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Update Notification</title>
+    <title>Manage Notifications | Admin</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .container { max-width: 600px; margin: 50px auto; padding: 20px; }
-        .form-box { background: #f9f9f9; padding: 30px; border-radius: 8px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 10px; font-weight: bold; }
-        .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
-        .success { color: green; margin-bottom: 15px; }
+        body { background-color: #f4f7f6; }
+        .container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .form-box { background: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        .notif-list { background: white; border-radius: 8px; overflow: hidden; }
+        .notif-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .notif-item:last-child { border-bottom: none; }
+        .btn-delete { color: #e74c3c; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="admin.php" class="btn btn-outline">&larr; Back to Dashboard</a>
-        <h2>Update Notification Message</h2>
-        <?php if(isset($success)) echo "<p class='success'>$success</p>"; ?>
+        <a href="admin.php" class="btn btn-outline" style="margin-bottom: 20px; display:inline-block;">&larr; Back to Dashboard</a>
+        <h2>Notifications Ticker</h2>
+
         <div class="form-box">
+            <h4>Add New Notice</h4>
             <form method="POST">
-                <div class="form-group">
-                    <label>Message</label>
-                    <textarea name="message" rows="4" required><?php echo $current_msg; ?></textarea>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" name="message" placeholder="Type notification..." required style="flex:1; padding:10px; border:1px solid #ddd; border-radius:4px;">
+                    <button type="submit" name="add_notification" class="btn btn-primary">Add</button>
                 </div>
-                <button type="submit" class="btn btn-primary">Update Message</button>
             </form>
+        </div>
+
+        <div class="notif-list">
+            <h4 style="padding:15px; background:#eee; margin:0;">Active Notifications</h4>
+            <?php
+            $result = $conn->query("SELECT * FROM notifications ORDER BY id DESC");
+            while($row = $result->fetch_assoc()):
+            ?>
+            <div class="notif-item">
+                <span><?php echo htmlspecialchars($row['message']); ?></span>
+                <a href="?delete=<?php echo $row['id']; ?>" class="btn-delete"><i class="fas fa-trash"></i></a>
+            </div>
+            <?php endwhile; ?>
         </div>
     </div>
 </body>

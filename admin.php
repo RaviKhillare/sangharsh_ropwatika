@@ -1,71 +1,170 @@
 <?php
+include 'api/db_connect.php';
 session_start();
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: login.php");
-    exit;
-}
+// In a real app, implement login check here
+// if (!isset($_SESSION['admin_logged_in'])) header("Location: login.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard - Ankur Ropvatika</title>
+    <title>Admin Dashboard | Ankur Ropwatika</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .admin-container { max-width: 1200px; margin: 50px auto; padding: 20px; }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .dashboard-card { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; transition: transform 0.3s; }
-        .dashboard-card:hover { transform: translateY(-5px); }
-        .dashboard-card i { font-size: 3rem; color: #2ecc71; margin-bottom: 20px; }
-        .dashboard-card h3 { margin-bottom: 15px; }
-        .btn-logout { background: #e74c3c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+        body { background-color: #f4f7f6; }
+        .admin-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        
+        .admin-header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .stat-info h3 { font-size: 2rem; margin: 0; color: var(--text-main); }
+        .stat-info p { margin: 0; color: var(--text-light); }
+
+        .action-grid {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .action-card {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .action-card:hover { border-color: var(--secondary); background: #fdfdfd; }
+        .action-card i { font-size: 2rem; color: var(--secondary); margin-bottom: 10px; }
+        .action-card h4 { margin-bottom: 5px; }
+
     </style>
 </head>
 <body>
+
     <div class="admin-container">
         <div class="admin-header">
-            <h1>Admin Dashboard</h1>
-            <a href="logout.php" class="btn-logout">Logout</a>
+            <div>
+                <h2>Admin Dashboard</h2>
+                <p>Welcome back, Admin</p>
+            </div>
+            <a href="index.php" class="btn btn-outline" target="_blank">View Website</a>
         </div>
 
+        <!-- Stats Overview -->
         <div class="dashboard-grid">
-            <div class="dashboard-card">
-                <i class="fas fa-leaf"></i>
-                <h3>Manage Products</h3>
-                <p>Add, Edit, or Delete plants and products.</p>
-                <a href="admin_products.php" class="btn btn-primary">Go to Products</a>
+            <div class="stat-card" onclick="location.href='admin_orders.php'">
+                <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+                <div class="stat-info">
+                    <h3>
+                        <?php 
+                        $res = $conn->query("SELECT count(*) as c FROM orders WHERE status='pending'");
+                        echo $res->fetch_assoc()['c'];
+                        ?>
+                    </h3>
+                    <p>Pending Orders</p>
+                </div>
             </div>
-
-            <div class="dashboard-card">
-                <i class="fas fa-info-circle"></i>
-                <h3>Manage About Us</h3>
-                <p>Update features and about section content.</p>
-                <a href="admin_about.php" class="btn btn-primary">Go to About Us</a>
+            <div class="stat-card" onclick="location.href='admin_products.php'">
+                <div class="stat-icon"><i class="fas fa-leaf"></i></div>
+                <div class="stat-info">
+                    <h3>
+                        <?php 
+                        $res = $conn->query("SELECT count(*) as c FROM products");
+                        echo $res->fetch_assoc()['c'];
+                        ?>
+                    </h3>
+                    <p>Total Products</p>
+                </div>
             </div>
+            <div class="stat-card" onclick="location.href='admin_messages.php'">
+                <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+                <div class="stat-info">
+                    <h3>
+                        <?php 
+                        $res = $conn->query("SELECT count(*) as c FROM messages");
+                        echo $res->fetch_assoc()['c'];
+                        ?>
+                    </h3>
+                    <p>Total Messages</p>
+                </div>
+            </div>
+        </div>
 
-            <div class="dashboard-card">
+        <!-- Quick Actions -->
+        <h3 style="margin: 40px 0 20px;">Quick Actions</h3>
+        <div class="action-grid">
+            <a href="admin_products.php" class="action-card">
+                <i class="fas fa-plus-circle"></i>
+                <h4>Manage Products</h4>
+                <p>Add or Edit items</p>
+            </a>
+            <a href="admin_orders.php" class="action-card">
+                <i class="fas fa-list-alt"></i>
+                <h4>Manage Orders</h4>
+                <p>View customer orders</p>
+            </a>
+            <a href="admin_settings.php" class="action-card">
+                <i class="fas fa-cog"></i>
+                <h4>Site Settings</h4>
+                <p>Title, Phone, Info</p>
+            </a>
+            <a href="admin_messages.php" class="action-card">
+                <i class="fas fa-comment-dots"></i>
+                <h4>Messages</h4>
+                <p>View Inbox</p>
+            </a>
+            <a href="admin_notification.php" class="action-card">
                 <i class="fas fa-bullhorn"></i>
-                <h3>Notifications</h3>
-                <p>Update the scrolling alert message.</p>
-                <a href="admin_notification.php" class="btn btn-primary">Update Message</a>
-            </div>
-
-            <div class="dashboard-card">
-                <i class="fas fa-images"></i>
-                <h3>Slideshow Image</h3>
-                <p>Change the main hero background image.</p>
-                <a href="admin_hero.php" class="btn btn-primary">Update Image</a>
-            </div>
-
-            <div class="dashboard-card">
-                <i class="fas fa-home"></i>
-                <h3>View Website</h3>
-                <p>Visit the main website home page.</p>
-                <a href="index.php" class="btn btn-outline">Visit Home</a>
-            </div>
+                <h4>Notifications</h4>
+                <p>Edit Ticker</p>
+            </a>
         </div>
     </div>
+
 </body>
 </html>

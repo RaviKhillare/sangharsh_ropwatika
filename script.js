@@ -1,70 +1,5 @@
-/* --- Mock Data --- */
-const products = [
-    {
-        id: 1,
-        name: "Snake Plant (स्नेक प्लांट)",
-        price: 450,
-        category: "indoor",
-        image: "https://images.unsplash.com/photo-1512428813838-6591185a31b1?auto=format&fit=crop&w=500&q=60",
-        description: "Best air purifying indoor plant. Low maintenance."
-    },
-    {
-        id: 2,
-        name: "Aloe Vera (कोरफड)",
-        price: 250,
-        category: "succulents",
-        image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=500&q=60",
-        description: "Medicinal plant for skin and health."
-    },
-    {
-        id: 3,
-        name: "Peace Lily (पीस लिली)",
-        price: 550,
-        category: "indoor",
-        image: "https://images.unsplash.com/photo-1593691509543-c55ce15e0131?auto=format&fit=crop&w=500&q=60",
-        description: "Beautiful white flowers and air purification."
-    },
-    {
-        id: 4,
-        name: "Monstera (मॉन्स्टेरा)",
-        price: 850,
-        category: "indoor",
-        image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=500&q=60",
-        description: "Stylish large leaves for modern homes."
-    },
-    {
-        id: 5,
-        name: "Golden Cactus (कॅक्टस)",
-        price: 300,
-        category: "succulents",
-        image: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=500&q=60",
-        description: "Beautiful golden spines, needs very less water."
-    },
-    {
-        id: 6,
-        name: "Rose Plant (गुलाब)",
-        price: 150,
-        category: "outdoor",
-        image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?auto=format&fit=crop&w=500&q=60",
-        description: "Classic red roses for your garden."
-    },
-    {
-        id: 7,
-        name: "Tulsi (तुळस)",
-        price: 100,
-        category: "outdoor",
-        image: "https://images.unsplash.com/photo-1596078736417-063a558509c2?auto=format&fit=crop&w=500&q=60",
-        description: "Holy basil, essential for every home."
-    },
-    {
-        id: 8,
-        name: "Rubber Plant",
-        price: 600,
-        category: "indoor",
-        image: "https://images.unsplash.com/photo-1470058869958-2a77ade41c02?auto=format&fit=crop&w=500&q=60",
-        description: "Glossy leaves, gives a premium look."
-    }
-];
+/* --- Data Source --- */
+let products = []; // Populated via API
 
 /* --- State --- */
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -83,12 +18,155 @@ const filterBtns = document.querySelectorAll('.filter-btn');
 
 /* --- Initialization --- */
 document.addEventListener('DOMContentLoaded', () => {
-    renderProducts('all');
+    fetchProducts(); // Initial Load
+    fetchSettings(); // New
+    fetchNotifications(); // New
     updateCartUI();
     setupEventListeners();
 });
 
 /* --- Functions --- */
+
+async function fetchSettings() {
+    try {
+        const response = await fetch('api/settings.php');
+        const settings = await response.json();
+
+        if (settings.site_title) {
+            document.title = settings.site_title;
+            document.getElementById('nav-logo-text').textContent = settings.site_title;
+            document.getElementById('footer-title').textContent = settings.site_title;
+        }
+        if (settings.hero_title) document.getElementById('hero-title').textContent = settings.hero_title;
+        if (settings.hero_subtitle) document.getElementById('hero-subtitle').textContent = settings.hero_subtitle;
+
+        if (settings.contact_email) document.getElementById('footer-email').textContent = settings.contact_email;
+        if (settings.contact_phone) document.getElementById('footer-phone').textContent = settings.contact_phone;
+        if (settings.contact_address) document.getElementById('footer-address').textContent = settings.contact_address;
+
+    } catch (e) { console.error("Error loading settings", e); }
+}
+
+async function fetchNotifications() {
+    try {
+        const response = await fetch('api/notifications.php');
+        const notifs = await response.json();
+
+        const ticker = document.getElementById('notification-ticker');
+        if (notifs.length > 0) {
+            // Join with spacing
+            ticker.textContent = notifs.join("  |  ");
+        } else {
+            document.querySelector('.notification-bar').style.display = 'none';
+        }
+    } catch (e) { console.error("Error loading notifications", e); }
+}
+
+async function submitContact(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const message = document.getElementById('contact-message').value;
+
+    try {
+        const response = await fetch('api/submit_message.php', {
+            method: 'POST',
+            body: JSON.stringify({ name, email, message })
+        });
+        const result = await response.json();
+
+        if (result.success) {
+            showToast("Message Sent Successfully!");
+            document.getElementById('contact-form').reset();
+        } else {
+            showToast("Error: " + result.message);
+        }
+    } catch (err) {
+        showToast("Network Error");
+    }
+}
+
+async function checkout() {
+    if (cart.length === 0) return showToast("Cart is empty!");
+
+    const name = prompt("Enter your Name:");
+    const phone = prompt("Enter your Phone:");
+    const address = prompt("Enter Address:");
+
+    if (!name || !phone || !address) return;
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    try {
+        const response = await fetch('api/submit_order.php', {
+            method: 'POST',
+            body: JSON.stringify({
+                name, phone, address, total, cart
+            })
+        });
+        const res = await response.json();
+        if (res.success) {
+            showToast("Order Placed! ID: " + res.order_id);
+            cart = [];
+            saveCart();
+            updateCartUI();
+            document.getElementById('cart-modal-overlay').style.display = 'none';
+        } else {
+            showToast("Order Failed: " + res.message);
+        }
+    } catch (e) { showToast("Network Error"); }
+}
+
+async function fetchProducts(category = 'all') {
+    productContainer.innerHTML = '<p style="text-align:center; width:100%;">Loading plants...</p>';
+
+    try {
+        const response = await fetch(`api/products.php?category=${category}`);
+        if (!response.ok) throw new Error('Failed to fetch');
+
+        products = await response.json();
+
+        // Render
+        renderProducts(products);
+    } catch (error) {
+        console.error("API Error:", error);
+        productContainer.innerHTML = '<p style="text-align:center; color:red;">Could not connect to database. Please ensure XAMPP is running.</p>';
+    }
+}
+
+function renderProducts(productList) {
+    productContainer.innerHTML = '';
+
+    if (productList.length === 0) {
+        productContainer.innerHTML = '<p style="text-align:center;">No products found.</p>';
+        return;
+    }
+
+    productList.forEach(product => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        // Ensure numbers are parsable
+        const price = parseFloat(product.price);
+
+        card.innerHTML = `
+            <div class="illustration-box">
+                <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">${product.name}</h3>
+                <p class="card-desc">${product.description || ''}</p>
+                <div class="card-footer">
+                    <span class="price">₹${price}</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart(${product.id})">
+                        Add to Cart <i class="fas fa-shopping-bag"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        productContainer.appendChild(card);
+    });
+}
 
 function setupEventListeners() {
     // Filter click
@@ -100,7 +178,7 @@ function setupEventListeners() {
             btn.classList.add('active');
             // Filter
             const category = btn.getAttribute('data-filter');
-            renderProducts(category);
+            fetchProducts(category); // Call API instead of local filtering
         });
     });
 
@@ -126,40 +204,20 @@ function setupEventListeners() {
     mobileMenu.addEventListener('click', () => {
         navMenu.classList.toggle('active');
     });
-}
 
-function renderProducts(category) {
-    productContainer.innerHTML = '';
-    
-    const filtered = category === 'all' 
-        ? products 
-        : products.filter(p => p.category === category);
-
-    filtered.forEach(product => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.innerHTML = `
-            <div class="illustration-box">
-                <img src="${product.image}" alt="${product.name}" loading="lazy">
-            </div>
-            <div class="card-content">
-                <h3 class="card-title">${product.name}</h3>
-                <p class="card-desc">${product.description}</p>
-                <div class="card-footer">
-                    <span class="price">₹${product.price}</span>
-                    <button class="btn btn-primary btn-sm" onclick="addToCart(${product.id})">
-                        Add to Cart <i class="fas fa-shopping-bag"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-        productContainer.appendChild(card);
-    });
+    // Contact Form
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', submitContact);
+    }
 }
 
 function addToCart(id) {
-    const product = products.find(p => p.id === id);
-    const existingItem = cart.find(item => item.id === id);
+    // API returns IDs as strings sometimes, so use loose comparison
+    const product = products.find(p => p.id == id);
+    if (!product) return;
+
+    const existingItem = cart.find(item => item.id == id);
 
     if (existingItem) {
         existingItem.quantity++;
@@ -173,7 +231,7 @@ function addToCart(id) {
 }
 
 function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
+    cart = cart.filter(item => item.id != id);
     saveCart();
     updateCartUI();
     renderCartItems(); // Re-render modal list
@@ -190,7 +248,7 @@ function updateCartUI() {
 
 function renderCartItems() {
     cartItemsContainer.innerHTML = '';
-    
+
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p style="text-align:center; color:#888;">Your cart is empty.</p>';
         return;
@@ -200,7 +258,7 @@ function renderCartItems() {
         const itemEl = document.createElement('div');
         itemEl.classList.add('cart-item');
         itemEl.innerHTML = `
-            <img src="${item.image}" alt="${item.name}">
+            <img src="${item.image_url}" alt="${item.name}">
             <div class="cart-item-details">
                 <h4>${item.name}</h4>
                 <p>₹${item.price} x ${item.quantity}</p>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
 
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <a href="#" class="logo"><i class="fas fa-leaf"></i> अंकुर रोपवाटिका</a>
-            
+
             <div class="menu-toggle" id="mobile-menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -26,6 +28,8 @@
                 <li><a href="#products" class="nav-link">Shop</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="login.php" class="nav-link" style="color: var(--primary); font-weight: bold;">Admin
+                        Login</a></li>
                 <li class="cart-icon-wrapper" id="cart-btn">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-badge" id="cart-count">0</span>
@@ -94,7 +98,9 @@
     <!-- Contact Section -->
     <section id="contact" class="section-padding">
         <div class="container">
-            <div class="section-title"><h2>संपर्क करा</h2></div>
+            <div class="section-title">
+                <h2>संपर्क करा</h2>
+            </div>
             <div class="contact-wrapper">
                 <div class="contact-info">
                     <div class="contact-item">
@@ -141,7 +147,8 @@
             </div>
             <div class="cart-footer">
                 <span class="total-price">Total: ₹<span id="cart-total">0</span></span>
-                <button class="btn btn-primary" style="width: 100%;" onclick="alert('Checkout functionality coming soon!')">Checkout Now</button>
+                <button class="btn btn-primary" style="width: 100%;"
+                    onclick="alert('Checkout functionality coming soon!')">Checkout Now</button>
             </div>
         </div>
     </div>
@@ -151,4 +158,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
